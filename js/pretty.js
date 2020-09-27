@@ -70,22 +70,70 @@ var makeTranslateString = function(x,y)
 var drawAxes = function(graphDim,margins,
                          xScale,yScale)
 {
+
+   var xAxis = d3.axisBottom()
+                    .scale(xScale)
+
+   var yAxis = d3.axisLeft()
+                    .scale(yScale) 
+   d3.select("svg")
+        .append("g")
+        .attr("class", "axis")
+        .attr("transform", makeTranslateString(margins.left, graphDim.height ))
+        .call(xAxis)
+        
+   d3.select("svg")
+        .append("g")
+        .attr("class", "axis")
+        .attr("transform", makeTranslateString(margins.left, 0))
+        .call(yAxis)
+
+        
+        
    
  
 }
 
 
 //graphDim -object that stores dimensions of the graph area
-//margins - objedct that stores the size of the margins
+//margins - object that stores the size of the margins
 var drawLabels = function(graphDim,margins)
 {
+    var labels = d3.select("svg")
+                    .append("g")
+                    .classed("labels", true)
     
+    labels.append("text")
+        .text("Trump Support")
+        .classed("title", true)
+        .attr("text-anchor", "middle")
+        .attr("x", (graphDim.width/2))
+        .attr("y", margins.top + 20)
+    
+    labels.append("text")
+        .text("White Percentage")
+        .classed("label", true)
+        .attr("text-anchor", "middle")
+        .attr("x", margins.left + (graphDim.width/2))
+        .attr("y", graphDim.height + 40)
+    
+    labels.append("g")
+        .attr("transform","translate(0,"+ 
+              ((graphDim.height/2))+")")
+        .append("text")
+        .text("Percentage Voting for Trump")
+        .classed("label", true)
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(90)")
 }
 
 
 var drawLegend = function(graphDim,margins)
 {
-    
+    var legend = d3.select(graphDim)
+                    .append("g")
+                    .classed("legend", true)
+                    .attr("transform", "translate(" + (margins.left + 10) +"," + (margins.top + 10)+")");
  
    var categories = [
        {
@@ -107,7 +155,7 @@ var drawLegend = function(graphDim,margins)
 //sets up several important variables and calls the functions for the visualization.
 var initGraph = function(counties)
 {
-    //size of screen
+    //size of scre en
     var screen = {width:800,height:600}
     //how much space on each side
     var margins = {left:30,right:20,top:20,bottom:30}
